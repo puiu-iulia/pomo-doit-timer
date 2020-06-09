@@ -1,0 +1,80 @@
+import React from 'react';
+import { Platform, Text } from 'react-native';
+import { createAppContainer, createSwitchNavigator } from 'react-navigation';
+import { createDrawerNavigator, DrawerItems } from 'react-navigation-drawer';
+import { createStackNavigator } from 'react-navigation-stack';
+import { createBottomTabNavigator } from 'react-navigation-tabs';
+import { Ionicons } from '@expo/vector-icons';
+import { FontAwesome5 } from '@expo/vector-icons';
+import { MaterialIcons } from '@expo/vector-icons';
+import { createMaterialBottomTabNavigator} from 'react-navigation-material-bottom-tabs';
+import { AntDesign } from '@expo/vector-icons';
+import { Entypo } from '@expo/vector-icons';
+
+import AuthScreen from '../screens/AuthScreen';
+import DetailsSubtasksScreen from '../screens/DetailsSubtasksScreen';
+import TasksScreen from '../screens/TasksScreen';
+import WelcomeScreen from '../screens/WelcomeScreen';
+import TimerScreen from '../screens/TimerScreen';
+
+
+const tasksListFlow = createStackNavigator(
+    {
+        Tasks: TasksScreen,
+        DetailsSubtasks: DetailsSubtasksScreen,
+        Timer: SendOfferScreen
+    }, {
+        navigationOptions: {
+            drawerLabel: 'All Tasks', 
+            labelStyle: {
+                color: '#fff'
+            }
+        }
+    }
+);
+
+
+// const ProfileNavigator = createStackNavigator({
+//     Profile: ProfileScreen
+// }, {
+//     navigationOptions: {
+//         drawerLabel: 'Profilul Meu',
+//         labelStyle: {
+//             color: '#fff'
+//         }
+//     }
+// })
+
+
+// mainFlow.navigationOptions = {
+//     tabBarOptions: {
+//         // labelStyle: {
+//         //     fontFamily: 'open-sans-bold'
+//         // },
+//         activeTintColor: '#fff'
+//     }
+// }
+
+
+
+const mainFlow = createDrawerNavigator({
+    tasksList: tasksListFlow,
+    // ProfileOverview:  ProfileNavigator
+}, 
+{
+    drawerBackgroundColor: '#6e7c7d',
+    contentOptions: {
+        labelStyle: {
+            color: '#fff'
+        },
+        activeTintColor: '#fff'
+    },
+    contentComponent: props => {
+        return (
+            <DrawerItems {...props} />
+        );
+    }       
+})
+
+
+export default createAppContainer(mainFlow);
