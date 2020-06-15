@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
-import MainNavigator from './navigation/MainNavigator';
+import MainNavigator from './src/navigation/MainNavigator';
 
 export default function App() {
   return (

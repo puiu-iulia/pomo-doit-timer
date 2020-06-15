@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import { Context as TaskContext } from '../context/TaskContext';
 import { NavigationEvents } from 'react-navigation';
 
-const TimerScreen = ({navigation}) => {
+const InfoScreen = ({navigation}) => {
 
     // const { state, fetchTasks } = useContext(TaskContext);
 
@@ -31,7 +31,7 @@ const TimerScreen = ({navigation}) => {
     );
 };
 
-TimerScreen.navigationOptions = (navigationData) => {
+InfoScreen.navigationOptions = (navigationData) => {
     return {
         headerTitle: 'Tasks To Do',
     };
@@ -45,4 +45,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default TimerScreen;
+export default InfoScreen;

@@ -3,11 +3,9 @@ import { Platform, Text } from 'react-native';
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createDrawerNavigator, DrawerItems } from 'react-navigation-drawer';
 import { createStackNavigator } from 'react-navigation-stack';
-import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
-import { createMaterialBottomTabNavigator} from 'react-navigation-material-bottom-tabs';
 import { AntDesign } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 
@@ -16,13 +14,15 @@ import DetailsSubtasksScreen from '../screens/DetailsSubtasksScreen';
 import TasksScreen from '../screens/TasksScreen';
 import WelcomeScreen from '../screens/WelcomeScreen';
 import TimerScreen from '../screens/TimerScreen';
+import ProfileScreen from '../screens/ProfileScreen';
+import InfoScreen from '../screens/InfoScreen';
 
 
 const tasksListFlow = createStackNavigator(
     {
         Tasks: TasksScreen,
         DetailsSubtasks: DetailsSubtasksScreen,
-        Timer: SendOfferScreen
+        Timer: TimerScreen
     }, {
         navigationOptions: {
             drawerLabel: 'All Tasks', 
@@ -34,17 +34,28 @@ const tasksListFlow = createStackNavigator(
 );
 
 
-// const ProfileNavigator = createStackNavigator({
-//     Profile: ProfileScreen
-// }, {
-//     navigationOptions: {
-//         drawerLabel: 'Profilul Meu',
-//         labelStyle: {
-//             color: '#fff'
-//         }
-//     }
-// })
+const ProfileNavigator = createStackNavigator({
+    Profile: ProfileScreen
+}, {
+    navigationOptions: {
+        drawerLabel: 'Account',
+        labelStyle: {
+            color: '#fff'
+        }
+    }
+})
 
+
+const InfoNavigator = createStackNavigator({
+    Info: InfoScreen
+}, {
+    navigationOptions: {
+        drawerLabel: 'Info',
+        labelStyle: {
+            color: '#fff'
+        }
+    }
+})
 
 // mainFlow.navigationOptions = {
 //     tabBarOptions: {
@@ -55,11 +66,23 @@ const tasksListFlow = createStackNavigator(
 //     }
 // }
 
+const TimerNavigator = createStackNavigator({
+    TimerData: TimerScreen
+}, {
+    navigationOptions: {
+        drawerLabel: 'Timer',
+        labelStyle: {
+            color: '#fff'
+        }
+    }
+})
 
 
 const mainFlow = createDrawerNavigator({
     tasksList: tasksListFlow,
-    // ProfileOverview:  ProfileNavigator
+    ProfileOverview:  ProfileNavigator,
+    InfoOverview: InfoNavigator,
+    TimerOverview: TimerNavigator
 }, 
 {
     drawerBackgroundColor: '#6e7c7d',
