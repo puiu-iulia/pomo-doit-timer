@@ -7,40 +7,35 @@ import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 
 import HeaderButton from '../components/HeaderButton';
 import TaskItem from '../components/TaskItem';
+import CustomModal from '../components/CustomModal';
+import { TextInput } from 'react-native-gesture-handler';
 
 const TasksScreen = ({navigation}) => {
 
-    // const { state, fetchTasks } = useContext(TaskContext);
-    // const [isModalVisible, setIsModalVisible] = useState(false);
+    // const { state } = useContext(TaskContext);
+
     const isModalVisible = navigation.getParam('isModalVisible')
     useEffect(() => {
         navigation.setParams({isModalVisible: false});
       }, []);
 
-    return (
-        <View style={styles.screen}>
-              <Modal
-                    animationType="fade"
-                    visible={isModalVisible}
-                    onRequestClose={() => {
-                        Alert.alert("Modal has been closed.");
-                    }}
-                >
-                    <View style={styles.centeredView}>
-                    <View style={styles.modalView}>
-                        <Text style={styles.modalText}>Hello World!</Text>
+    if (!isModalVisible) {
+      return (
+        <View style={styles.centeredView}>
+          <Text style={styles.centeredText}>You have no tasks to complete at the moment. Tap the + above to create a new project.</Text>
+        </View>
+      )
+    }
 
-                        <TouchableHighlight
-                        style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
-                        onPress={() => {
-                            navigation.setParams({isModalVisible: false});
-                        }}
-                        >
-                        <Text style={styles.textStyle}>Hide Modal</Text>
-                        </TouchableHighlight>
-                    </View>
-                    </View>
-                </Modal>
+    return (
+        <View style={styles.centeredView}>
+            <CustomModal
+              onClose={() => {
+                navigation.setParams({isModalVisible: false});
+              }}
+              // addItemHandler={createTask} 
+              modalVisible={isModalVisible} 
+            />
             {/* <NavigationEvents onWillFocus={fetchTasks} /> */}
             <FlatList
                 // data={state}
@@ -97,46 +92,14 @@ TasksScreen.navigationOptions = (navData) => {
 };
 
 const styles = StyleSheet.create({
-    screen: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
     centeredView: {
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
-        marginTop: 22
+        margin: 16
       },
-      modalView: {
-        margin: 20,
-        backgroundColor: "white",
-        borderRadius: 20,
-        padding: 35,
-        alignItems: "center",
-        shadowColor: "#000",
-        shadowOffset: {
-          width: 0,
-          height: 2
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-        elevation: 5
-      },
-      openButton: {
-        backgroundColor: "#F194FF",
-        borderRadius: 20,
-        padding: 10,
-        elevation: 2
-      },
-      textStyle: {
-        color: "white",
-        fontWeight: "bold",
-        textAlign: "center"
-      },
-      modalText: {
-        marginBottom: 15,
-        textAlign: "center"
+      centeredText: {
+        textAlign:'center'
       }
 });
 

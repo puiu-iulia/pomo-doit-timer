@@ -4,6 +4,9 @@ const taskReducer = (state, action) => {
   switch (action.type) {
     case 'fetch_tasks':
       return action.payload;
+    case 'add_task': {
+      return action.payload;
+    }
     default:
       return state;
   }
@@ -23,7 +26,7 @@ const fetchTasks = dispatch => async () => {
   
   
 };
-const createTask = dispatch => async (title, description, estimatedTime, priority, deadline) => {
+const createTask = dispatch => async (title, priority, deadline) => {
 
     await fetch('https://pomodoit-a20ed.firebaseio.com/tasks.json',
     {
@@ -33,12 +36,11 @@ const createTask = dispatch => async (title, description, estimatedTime, priorit
         },
         body: JSON.stringify({
             title,
-            description,
-            estimatedTime,
             priority,
             deadline
         })
     });
+    dispatch({ type: 'add_task', payload: response.data.title})
 };
 
 export const { Provider, Context } = createDataContext(
