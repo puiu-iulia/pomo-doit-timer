@@ -1,11 +1,24 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import ReduxThunk from 'redux-thunk';
+import { createStore, combineReducers, applyMiddleware } from 'redux';
+import { Provider } from 'react-redux';
 
 import MainNavigator from './src/navigation/MainNavigator';
+// import { Provider as TaskProvider } from './src/context/TaskContext';
+import taskReducer from './src/store/reducers/task';
+
+const rootReducer = combineReducers({
+  tasks: taskReducer
+})
+
+const store = createStore(rootReducer, applyMiddleware(ReduxThunk))
 
 export default function App() {
   return (
-    <MainNavigator />
+    <Provider store={store}>
+         <MainNavigator />
+    </Provider>
   );
 }
 

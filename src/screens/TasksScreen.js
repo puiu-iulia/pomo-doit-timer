@@ -1,45 +1,67 @@
-import React, { useContext,  useEffect, useState } from 'react';
-import { View, FlatList, StyleSheet, Modal, Text, TouchableHighlight } from 'react-native';
-import { Context as TaskContext } from '../context/TaskContext';
+import React, { useContext,  useEffect, useState, useCallback } from 'react';
+import { View, FlatList, StyleSheet, Modal, Text, TouchableOpacity } from 'react-native';
 import { NavigationEvents } from 'react-navigation';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import { useSelector, useDispatch } from 'react-redux';
+import { ListItem } from 'react-native-elements';
 
 import HeaderButton from '../components/HeaderButton';
 import TaskItem from '../components/TaskItem';
 import CustomModal from '../components/CustomModal';
-import { TextInput } from 'react-native-gesture-handler';
+import * as taskActions from '../store/actions/task';
 
 const TasksScreen = ({navigation}) => {
+    const tasks = useSelector(state => state.tasks.tasks);
+    // console.log(tasks);
+    const dispatch = useDispatch();
 
-    // const { state } = useContext(TaskContext);
+    const loadTasks = async () => {
+      try {
+        await dispatch(taskActions.fetchTasks());
+      } catch (err) {
+         console.log(err);
+      }
+    };
+
+    useEffect(() => {
+      const willFocusSub = navigation.addListener(
+        'willFocus',
+        loadTasks
+      );
+  
+      return () => {
+        willFocusSub.remove();
+      };
+    }, [loadTasks]);
+
+ 
 
     const isModalVisible = navigation.getParam('isModalVisible')
     useEffect(() => {
         navigation.setParams({isModalVisible: false});
       }, []);
 
-    if (!isModalVisible) {
-      return (
-        <View style={styles.centeredView}>
-          <Text style={styles.centeredText}>You have no tasks to complete at the moment. Tap the + above to create a new project.</Text>
-        </View>
-      )
-    }
+    // if (tasks.length === 0) {
+    //   return (
+    //     <View style={styles.centeredView}>
+    //       <Text style={styles.centeredText}>You have no tasks to complete at the moment. Tap the + above to create a new project.</Text>
+    //     </View>
+    //   )
+    // }
 
     return (
-        <View style={styles.centeredView}>
+        <View style={styles.screen}>
             <CustomModal
               onClose={() => {
                 navigation.setParams({isModalVisible: false});
               }}
-              // addItemHandler={createTask} 
               modalVisible={isModalVisible} 
             />
             {/* <NavigationEvents onWillFocus={fetchTasks} /> */}
             <FlatList
-                // data={state}
-                // keyExtractor={item => item._id}
+                data={tasks}
+                keyExtractor={item => item.id}
                 renderItem={({ item }) => {
                 return (
                     <TouchableOpacity
@@ -47,7 +69,17 @@ const TasksScreen = ({navigation}) => {
                         //     navigation.navigate('DetailsSubtasks', { id: item.id })
                         // }
                     >
-                        <TaskItem />
+                        {/* <TaskItem title={item.title}/> */}
+                        <View style={{flex: 1, width: '100%'}}>
+                          {/* <ListItem
+                            title={item.title}
+                            subtitle={item.deadline} 
+                            chevron
+                            bottomDivider
+                          /> */}
+                          <Text>{item.title}</Text>
+                          <Text>{item.deadline}</Text>
+                        </View>
                     </TouchableOpacity>
                     );
                 }}
@@ -92,15 +124,16 @@ TasksScreen.navigationOptions = (navData) => {
 };
 
 const styles = StyleSheet.create({
-    centeredView: {
+    screen: {
         flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-        margin: 16
-      },
-      centeredText: {
-        textAlign:'center'
-      }
+    },
+    centeredView: {
+      alignItems: "center",
+      margin: 16
+    },
+    centeredText: {
+      textAlign:'center'
+    }
 });
 
 export default TasksScreen;

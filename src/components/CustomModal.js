@@ -1,11 +1,14 @@
-import React, { useState, useReducer } from 'react';
+import React, { useState, useCallback } from 'react';
 import { View, StyleSheet, Modal, TouchableHighlight, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Input, Button, Text, CheckBox} from 'react-native-elements';
 import { Calendar } from 'react-native-calendars';
 import { TextInput } from 'react-native-gesture-handler';
+import { useDispatch } from 'react-redux';
+
+import * as taskActions from '../store/actions/task';
  
-const CustomModal = ({modalVisible, onClose}) => {
+const CustomModal = ({modalVisible, onClose, addItemHandler}) => {
 
     const [title, setTitle] = useState();
     const [priority, setPriority] = useState(1);
@@ -14,7 +17,17 @@ const CustomModal = ({modalVisible, onClose}) => {
     const [lowChecked, setLowChecked] = useState(false);
     const [date, setDate] = useState();
 
-    //ToDo: Refactor using useReducer
+    const dispatch = useDispatch()
+
+    const createTask = useCallback(async () => {
+        try {
+          await dispatch(taskActions.addTask(title, priority, 'today'));
+        } catch (err) {
+            console.log(err);
+        }
+      })
+
+    //ToDo: Refactor with useReducer
 
     const handleHighCheck = () => {
         setPriority(1);
@@ -102,8 +115,10 @@ const CustomModal = ({modalVisible, onClose}) => {
                     type="outline"
                     containerStyle={styles.saveButton}  
                     title={'Save'}
-                    // onPress={(title, priority) => {
-                    //     addItemHandler(title, priority, null)}}
+                    onPress={(title, priority) => {
+                        createTask();
+                        onClose();
+                    }}
                 />
             </View>
         </Modal>
