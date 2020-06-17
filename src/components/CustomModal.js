@@ -21,7 +21,7 @@ const CustomModal = ({modalVisible, onClose, addItemHandler}) => {
 
     const createTask = useCallback(async () => {
         try {
-          await dispatch(taskActions.addTask(title, priority, 'today'));
+          await dispatch(taskActions.addTask(title, priority, date));
         } catch (err) {
             console.log(err);
         }
@@ -30,21 +30,21 @@ const CustomModal = ({modalVisible, onClose, addItemHandler}) => {
     //ToDo: Refactor with useReducer
 
     const handleHighCheck = () => {
-        setPriority(1);
+        setPriority('#966658');
         setHighChecked(true);
         setMediumChecked(false);
         setLowChecked(false);
     }
 
     const handleMediumCheck = () => {
-        setPriority(2);
+        setPriority('#589690');
         setHighChecked(false);
         setMediumChecked(true);
         setLowChecked(false);
     }
     
     const handleLowCheck = () => {
-        setPriority(3);
+        setPriority('#6e7c7d');
         setHighChecked(false);
         setMediumChecked(false);
         setLowChecked(true);
@@ -104,18 +104,21 @@ const CustomModal = ({modalVisible, onClose, addItemHandler}) => {
                         checkedIcon='dot-circle-o' 
                         uncheckedIcon='circle-o' 
                         title='Low'
-                        checkedColor='grey'  
+                        checkedColor='#6e7c7d'  
                     />
                 </View>
-                <Text style={styles.labelText}>Deadline: Today</Text>
+        <Text style={styles.labelText}>Deadline: {(date) ? date: 'Today'}</Text>
                 <Calendar
-                    onDayPress={setDate}
+                    onDayPress={(day) => {
+                        setDate(day.dateString);
+                        console.log(day, date);
+                    }}
                 />     
                 <Button
                     type="outline"
                     containerStyle={styles.saveButton}  
                     title={'Save'}
-                    onPress={(title, priority) => {
+                    onPress={() => {
                         createTask();
                         onClose();
                     }}
@@ -149,7 +152,7 @@ const styles = StyleSheet.create({
     },
     inputContainer: {
         width: '90%',
-        borderBottomColor: 'grey',
+        borderBottomColor: '#6e7c7d',
         borderBottomWidth: 1,
         marginBottom: 4
     },
@@ -159,7 +162,7 @@ const styles = StyleSheet.create({
         fontSize: 18
     },
     labelText: {
-        color: 'grey',
+        color: '#6e7c7d',
         fontSize: 16
     },
     calendar: {
