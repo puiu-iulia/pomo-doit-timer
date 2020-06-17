@@ -1,13 +1,8 @@
 import React, { useContext } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { Context as TaskContext } from '../context/TaskContext';
 import { NavigationEvents } from 'react-navigation';
 
 const TimerScreen = ({navigation}) => {
-
-    // const { state, fetchTasks } = useContext(TaskContext);
-
-
 
     return (
         <View style={styles.screen}>

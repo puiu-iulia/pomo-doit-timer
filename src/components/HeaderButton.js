@@ -9,7 +9,7 @@ const CustomHeaderButton = props => {
     <HeaderButton
       {...props}
       IconComponent={Ionicons}
-      iconSize={24}
+      iconSize={28}
     />
   );
 };

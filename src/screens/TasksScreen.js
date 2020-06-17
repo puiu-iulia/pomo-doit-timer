@@ -35,8 +35,6 @@ const TasksScreen = ({navigation}) => {
       };
     }, [loadTasks]);
 
- 
-
     const isModalVisible = navigation.getParam('isModalVisible')
     useEffect(() => {
         navigation.setParams({isModalVisible: false});
@@ -65,20 +63,17 @@ const TasksScreen = ({navigation}) => {
                 renderItem={({ item }) => {
                 return (
                     <TouchableOpacity
-                        // onPress={() =>
-                        //     navigation.navigate('DetailsSubtasks', { id: item.id })
-                        // }
+                        onPress={() =>
+                            navigation.navigate('DetailsSubtasks', { id: item.id })
+                        }
                     >
-                        {/* <TaskItem title={item.title}/> */}
-                        <View style={{flex: 1, width: '100%'}}>
-                          {/* <ListItem
+                        <View style={{flex: 1, width: '100%', borderBottomColor: '#6e7c7d', borderBottomWidth: 1}}>
+                          <ListItem
+                            leftIcon={{ name: 'check', color: item.priority}}
                             title={item.title}
                             subtitle={item.deadline} 
                             chevron
-                            bottomDivider
-                          /> */}
-                          <Text>{item.title}</Text>
-                          <Text>{item.deadline}</Text>
+                          />
                         </View>
                     </TouchableOpacity>
                     );
@@ -94,7 +89,7 @@ TasksScreen.navigationOptions = (navData) => {
         headerLeft: () => (
             <HeaderButtons HeaderButtonComponent={HeaderButton}>
               <Item
-                color='000'
+                color='#6e7c7d'
                 title="Menu"
                 iconName={Platform.OS === 'android' ? 'md-menu' : 'ios-menu'}
                 onPress={() => {
@@ -110,9 +105,9 @@ TasksScreen.navigationOptions = (navData) => {
               HeaderButtonComponent={HeaderButton}
             >
                <Item
-                 color='000' 
-                //  style={styles.cart} 
-                 title="Cart"
+                 color='#966658' 
+                size={32} 
+                 title="Add Task"
                  iconName={'md-add-circle-outline'}
                  onPress={() => {
                     navData.navigation.setParams({isModalVisible: true})
