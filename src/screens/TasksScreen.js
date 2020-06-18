@@ -13,7 +13,6 @@ import * as taskActions from '../store/actions/task';
 
 const TasksScreen = ({navigation}) => {
     const tasks = useSelector(state => state.tasks.tasks);
-    // console.log(tasks);
     const dispatch = useDispatch();
 
     const loadTasks = async () => {
@@ -35,7 +34,8 @@ const TasksScreen = ({navigation}) => {
       };
     }, [loadTasks]);
 
-    const isModalVisible = navigation.getParam('isModalVisible')
+    const isModalVisible = navigation.getParam('isModalVisible');
+    // console.log(isModalVisible)
     useEffect(() => {
         navigation.setParams({isModalVisible: false});
       }, []);

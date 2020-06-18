@@ -1,8 +1,9 @@
 class Subtask {
-    constructor(id, title, deadline) {
+    constructor(id, projectId, title, estimatedTime) {
         this.id = id;
+        this.projectId = projectId;
         this.title = title;
-        this.deadline = deadline;
+        this.estimatedTime = estimatedTime;
     }
 }
 

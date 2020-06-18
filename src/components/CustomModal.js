@@ -54,16 +54,13 @@ const CustomModal = ({modalVisible, onClose, addItemHandler}) => {
         <Modal
             animationType="fade"
             visible={modalVisible}
-            onRequestClose={() => {
-                Alert.alert("Modal has been closed.");
-            }}
         >
-                <TouchableOpacity
-                    style={styles.closeButton}
-                    onPress={onClose}
-                >
-                    <Ionicons name="ios-close-circle" size={24} color="black" />
-                </TouchableOpacity>
+            <TouchableOpacity
+                style={styles.closeButton}
+                onPress={onClose}
+            >
+                <Ionicons name="ios-close-circle" size={24} color="black" />
+            </TouchableOpacity>
 
             <View style={styles.modalView}>
                 <View style={styles.inputContainer}>
