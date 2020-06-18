@@ -7,9 +7,11 @@ import { Provider } from 'react-redux';
 import MainNavigator from './src/navigation/MainNavigator';
 // import { Provider as TaskProvider } from './src/context/TaskContext';
 import taskReducer from './src/store/reducers/task';
+import subtaskReducer from './src/store/reducers/subtask';
 
 const rootReducer = combineReducers({
-  tasks: taskReducer
+  tasks: taskReducer,
+  subtasks: subtaskReducer
 })
 
 const store = createStore(rootReducer, applyMiddleware(ReduxThunk))
