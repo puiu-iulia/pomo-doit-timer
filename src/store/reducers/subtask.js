@@ -1,14 +1,17 @@
-import { DELETE_SUBTASK, CREATE_SUBTASK, UPDATE_SUBTASK, GET_SUBTASKS } from '../actions/task';
+import { DELETE_SUBTASK, CREATE_SUBTASK, UPDATE_SUBTASK, GET_SUBTASKS } from '../actions/subtask';
 import Subtask from '../../models/subtask';
 
 const initialState = {
-    subtasks: []
+    allSubtasks: []
 }
 
 export default (state = initialState, action) => {
     switch (action.type) {
         case GET_SUBTASKS: {
-            return { subtasks: action.subtasks}
+            return { 
+                ...state,
+                allSubtasks: action.subtasks
+            }
         }
         case CREATE_SUBTASK: {
             const newSubtask = new Subtask(

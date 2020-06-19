@@ -16,7 +16,7 @@ export const fetchSubtasks = () => {
             const resData = await response.json();
             
            
-            const loadedSubtasks = [];
+            let loadedSubtasks = [];
 
             for (const key in resData) {
                 loadedSubtasks.push(
@@ -29,7 +29,7 @@ export const fetchSubtasks = () => {
                 )
             }
 
-            console.log(loadedSubtasks)
+            // console.log(loadedSubtasks)
     
             dispatch({ type: GET_SUBTASKS, subtasks: loadedSubtasks });
         } catch (err) {

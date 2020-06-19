@@ -9,13 +9,13 @@ import SubtaskModal from '../components/SubtaskModal';
 import ReminderModal from '../components/ReminderModal';
 import * as subtaskActions from '../store/actions/subtask';
 
+
 const DetailsSubtasksScreen = ({navigation}) => {
 
     const taskId = navigation.getParam('id');
     const selectedTask = useSelector(state => state.tasks.tasks.find(task => task.id === taskId));
 
-    const subtasks = useSelector(state => state.subtasks.subtasks);
-    console.log(subtasks);
+    const subtasks = useSelector(state => state.subtasks.allSubtasks);
     const dispatch = useDispatch();
     
     const loadSubtasks = async () => {
@@ -24,7 +24,7 @@ const DetailsSubtasksScreen = ({navigation}) => {
         } catch (err) {
            console.log(err);
         }
-    };
+    }; 
   
     useEffect(() => {
         loadSubtasks();
@@ -76,7 +76,7 @@ const DetailsSubtasksScreen = ({navigation}) => {
                 />
             </View>
             <View style={styles.titleContainer}>
-                <Text style={styles.subtasksText}>Time Spent:</Text>
+                <Text style={styles.subtasksText}>Time Spent on Project:</Text>
                 <TouchableOpacity     
                     style={styles.buttonContainer}>
                     <Button
@@ -100,7 +100,7 @@ const DetailsSubtasksScreen = ({navigation}) => {
                             navigation.setParams({isReminderModalVisible: true})
                         }}
                         titleStyle={{color: '#fff'}}
-                        buttonStyle={{backgroundColor: "#589690"}}
+                        buttonStyle={{backgroundColor: '#6e7c7d'}}
                         title={'Set Reminder'}
                         icon={
                             <Ionicons name="ios-calendar" size={24} color="white" style={{marginHorizontal: 8}} />}
@@ -118,7 +118,7 @@ const DetailsSubtasksScreen = ({navigation}) => {
                             console.log(isSubtaskModalVisible);
                         }}
                         titleStyle={{color: '#fff'}}
-                        buttonStyle={{backgroundColor: "#589690"}}
+                        buttonStyle={{backgroundColor: "#6e7c7d"}}
                         title={'Add Subtask'}
                         icon={
                             <Ionicons name="ios-add-circle" size={24} color="#fff" style={{marginHorizontal: 8}}/>}
@@ -135,7 +135,12 @@ const DetailsSubtasksScreen = ({navigation}) => {
                             navigation.navigate('Timer', { id: item.id })
                         }
                     >
-                        <ListItem checkBox title={item.name} subtitle={item.estimatedTime} />
+                        <View style={{flex: 1, width: '100%', borderBottomColor: '#6e7c7d', borderBottomWidth: 0.5}}>
+                            <ListItem 
+                                leftIcon={{ name: 'check-box-outline-blank', type: 'materialicons', color: "#589690"}}
+                                title={item.title} 
+                                subtitle={'Estimated time: ' + item.estimatedTime + ' min'} />
+                        </View>
                     </TouchableOpacity>
                     );
                 }}
@@ -175,7 +180,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: 8,
-        marginBottom: 8
+        marginTop: 8
     },
     titleTaskText: {
         fontSize: 18,
