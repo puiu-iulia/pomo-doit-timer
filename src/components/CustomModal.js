@@ -21,7 +21,7 @@ const CustomModal = ({modalVisible, onClose, addItemHandler}) => {
 
     const createTask = useCallback(async () => {
         try {
-          await dispatch(taskActions.addTask(title, priority, date));
+          await dispatch(taskActions.addTask(title, priority, date), [dispatch, title, priority, date]);
         } catch (err) {
             console.log(err);
         }

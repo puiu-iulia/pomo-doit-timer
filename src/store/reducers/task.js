@@ -8,14 +8,14 @@ const initialState = {
 export default (state = initialState, action) => {
     switch (action.type) {
         case GET_TASKS: {
-            return { tasks: action.tasks}
+            return { ...state, tasks: action.tasks}
         }
         case CREATE_TASK: {
             const newTask = new Task(
                 action.taskData.id,
                 action.taskData.title,
                 action.taskData.priority,
-                action.taskData.deadline
+                action.taskData.deadline 
             );
             return {
                 ...state,

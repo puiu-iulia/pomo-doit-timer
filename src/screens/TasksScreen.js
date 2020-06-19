@@ -69,6 +69,7 @@ const TasksScreen = ({navigation}) => {
                     >
                         <View style={{flex: 1, width: '100%', borderBottomColor: '#6e7c7d', borderBottomWidth: 1}}>
                           <ListItem
+                            titleStyle={{fontSize: 20}}
                             leftIcon={{ name: 'check', color: item.priority}}
                             title={item.title}
                             subtitle={item.deadline} 
@@ -84,8 +85,10 @@ const TasksScreen = ({navigation}) => {
 };
 
 TasksScreen.navigationOptions = (navData) => {
+    const Logo = <Text style={{fontSize: 24, color: '#966658', textAlign: 'center'}}>Do It Timer</Text>
     return {
-        headerTitle: 'To Do;',
+        
+        headerTitle: Logo,
         headerLeft: () => (
             <HeaderButtons HeaderButtonComponent={HeaderButton}>
               <Item
