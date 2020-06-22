@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { View, StyleSheet, Modal, Slider, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Modal, Slider, TouchableOpacity, AsyncStorage } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Input, Button, Text, CheckBox} from 'react-native-elements';
 // import Slider from '@react-native-community/slider';
@@ -8,9 +8,7 @@ import { useDispatch } from 'react-redux';
 
 import * as subtaskActions from '../store/actions/subtask';
  
-const TimerSettingsModal = ({modalVisible, onClose, taskId}) => {
-
-    console.log(modalVisible)
+const TimerSettingsModal = ({modalVisible, onClose, onSave}) => {
 
     const [workTime, setWorkTime] = useState(25);
     const [breakTime, setBreakTime] = useState(5);
@@ -19,13 +17,24 @@ const TimerSettingsModal = ({modalVisible, onClose, taskId}) => {
 
     const dispatch = useDispatch();
 
-    // const updateTimePreferences = useCallback(async () => {
-    //     try {
-    //       await dispatch(subtaskActions.addSubtask(taskId, title, estimatedTime));
-    //     } catch (err) {
-    //         console.log(err);
-    //     }
-    //   })
+    // const updateTimePreferences = async () => {
+    //     const storedWorkTime =  await AsyncStorage.getItem('workTime');
+    //     const storedBreakTime = await AsyncStorage.getItem('breakTime');
+    //     const storedWorkSessions = await AsyncStorage.getItem('')
+    //   }
+    // }
+
+    const updateTimePreferences = (workTime, breakTime, workSessions, longBreak) => {
+        AsyncStorage.setItem(
+            'timePreferences',
+            JSON.stringify({
+                workTime: workTime,
+                breakTime: breakTime,
+                workSessions: workSessions,
+                longBreak: longBreak
+            })
+        )
+    }
  
     return (
         <Modal
@@ -116,8 +125,9 @@ const TimerSettingsModal = ({modalVisible, onClose, taskId}) => {
                     containerStyle={styles.saveButton}  
                     title={'Save'}
                     onPress={() => {
-                        // createSubtask();
-                        // onCloseSubtask();
+                        updateTimePreferences(workTime, breakTime, workSessions, longBreak);
+                        onClose();
+                        onSave();
                     }}
                 />
             </View>

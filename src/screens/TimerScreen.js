@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Text, StyleSheet, View, Dimensions } from 'react-native';
+import React, { useState, useEffect, useCallback } from 'react';
+import { Text, StyleSheet, View, Dimensions, AsyncStorage } from 'react-native';
 import { NavigationEvents } from 'react-navigation';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -12,28 +12,55 @@ import TimerSettingsModal from '../components/TimerSettingsModal';
 
 const TimerScreen = ({navigation}) => {
 
-    const [fill, setFill] = useState(0);
+    const [minutes, setMinutes] = useState();
+    const [seconds, setSeconds] = useState();
+    const [workTime, setWorkTime] = useState(25);
+
+    //TODO: UpdateTimerText() 
+    // BackgroundTimer()
+    
+    const getTimePreferences = useCallback(async () => {
+        const timePreferences = await AsyncStorage.getItem('workPreferences');
+        if (timePreferences) {
+            const transformedData = JSON.parse(timePreferences);
+            const { storedWorkTime, storedBreakTime, storedWorkSessions, storedLongBreak } = transformedData;
+            setWorkTime(storedWorkTime);
+            console.log(storedWorkTime);
+        }
+      
+        console.log(workTime);
+    });
+    useEffect(() => {
+        getTimePreferences();
+    }, [isTimeChanged]);
 
 
-    console.log(isModalVisible)
+    useEffect(() => {
+        navigation.setParams({timeChanged: false})
+    }, [isTimeChanged]);
+    const isTimeChanged = navigation.getParam('timeChanged');
+  
     useEffect(() => {
         navigation.setParams({isTimerSettingsModalVisible: false});
-    }, []);
+    }, [isModalVisible]);
     const isModalVisible = navigation.getParam('isTimerSettingsModalVisible');
 
     return (
         <View style={styles.screen}>
             <TimerSettingsModal
-                isModalVisible={isModalVisible}
+                modalVisible={isModalVisible}
                 onClose={() => {
                     navigation.setParams({isTimerSettingsModalVisible: false});
+                }}
+                onSave={() => {
+                    navigation.setParams({timeChanged: true})
                 }}
             />
             <View style={styles.circleView}>
                 <View 
                     style={styles.circle}
                 >
-                    <Text style={styles.timerText}>25:00</Text>
+                    <Text style={styles.timerText}>{workTime}:00</Text>
                 </View>
             </View>
             <View>
