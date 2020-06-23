@@ -25,6 +25,7 @@ const TimerSettingsModal = ({modalVisible, onClose, onSave}) => {
     // }
 
     const updateTimePreferences = (workTime, breakTime, workSessions, longBreak) => {
+        // const item = AsyncStorage.getItem()
         AsyncStorage.setItem(
             'timePreferences',
             JSON.stringify({

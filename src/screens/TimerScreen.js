@@ -20,7 +20,7 @@ const TimerScreen = ({navigation}) => {
     // BackgroundTimer()
     
     const getTimePreferences = useCallback(async () => {
-        const timePreferences = await AsyncStorage.getItem('workPreferences');
+        const timePreferences = await AsyncStorage.getItem('timePreferences');
         if (timePreferences) {
             const transformedData = JSON.parse(timePreferences);
             const { storedWorkTime, storedBreakTime, storedWorkSessions, storedLongBreak } = transformedData;
@@ -30,9 +30,10 @@ const TimerScreen = ({navigation}) => {
       
         console.log(workTime);
     });
+
     useEffect(() => {
         getTimePreferences();
-    }, [isTimeChanged]);
+    }, [workTime]);
 
 
     useEffect(() => {

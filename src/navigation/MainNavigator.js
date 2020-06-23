@@ -12,13 +12,13 @@ import { Entypo } from '@expo/vector-icons';
 import AuthScreen from '../screens/AuthScreen';
 import DetailsSubtasksScreen from '../screens/DetailsSubtasksScreen';
 import TasksScreen from '../screens/TasksScreen';
-import WelcomeScreen from '../screens/WelcomeScreen';
+import StartupScreen from '../screens/StartupScreen';
 import TimerScreen from '../screens/TimerScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import InfoScreen from '../screens/InfoScreen';
 
 
-const tasksListFlow = createStackNavigator(
+const tasksFlow = createStackNavigator(
     {
         Tasks: TasksScreen,
         DetailsSubtasks: DetailsSubtasksScreen,
@@ -79,7 +79,7 @@ const TimerNavigator = createStackNavigator({
 
 
 const mainFlow = createDrawerNavigator({
-    tasksList: tasksListFlow,
+    tasksList: tasksFlow,
     ProfileOverview:  ProfileNavigator,
     InfoOverview: InfoNavigator,
     TimerOverview: TimerNavigator
@@ -97,7 +97,16 @@ const mainFlow = createDrawerNavigator({
             <DrawerItems {...props} />
         );
     }       
+});
+
+const mainNav = createSwitchNavigator({
+    Projects: mainFlow,
+    Auth: AuthScreen,
+    Startup: StartupScreen
+},
+{
+    initialRouteName: 'Auth'
 })
 
 
-export default createAppContainer(mainFlow);
+export default createAppContainer(mainNav);
