@@ -1,21 +1,55 @@
 import React, { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, KeyboardAvoidingView } from 'react-native';
 import { Text, Button, Input } from 'react-native-elements';
 import { AntDesign } from '@expo/vector-icons';
 import { Fontisto } from '@expo/vector-icons';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useDispatch } from 'react-redux';
 
-const LoginScreen = (props) => {
+import * as authActions from '../../src/store/actions';
+
+const AuthScreen = (props) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [isSignin, setIsSignin] = useState(true);
     const [isSignup, setIsSignup] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState();
 
     const dispatch = useDispatch();
 
+    useEffect(() => {
+        if (error) {
+          Alert.alert('An Error Occurred!', error, [{ text: 'Okay' }]);
+        }
+      }, [error]);
+
+    const authHandler = async () => {
+        let action;
+        if (isSignup) {
+          action = authActions.signup(
+            email,
+            password
+          );
+        } else {
+          action = authActions.login(
+            email,
+            password
+          );
+        }
+        setError(null);
+        setIsLoading(true);
+        try {
+          await dispatch(action);
+          props.navigation.navigate('Shop');
+        } catch (err) {
+          setError(err.message);
+          setIsLoading(false);
+        }
+      };
+
     return (
-        <View style={styles.screen}>
+        <KeyboardAvoidingView style={styles.screen}>
             <View style={styles.input}>
                 <Input
                     label="Email"
@@ -58,7 +92,7 @@ const LoginScreen = (props) => {
                 title={isSignup ? 'Login': 'SignUp'}
                 onPress={() => {props.navigation.navigate('Timer')}}
             />
-        </View>
+        </KeyboardAvoidingView>
     )
 }
 
@@ -79,4 +113,4 @@ const styles = StyleSheet.create({
     }
   });
 
-  export default LoginScreen;
+  export default AuthScreen;
