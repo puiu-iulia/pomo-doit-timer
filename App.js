@@ -8,13 +8,16 @@ import MainNavigator from './src/navigation/MainNavigator';
 // import { Provider as TaskProvider } from './src/context/TaskContext';
 import taskReducer from './src/store/reducers/task';
 import subtaskReducer from './src/store/reducers/subtask';
+import authReducer from './src/store/reducers/auth';
+import { auth } from 'firebase';
 
-const rootReducer = combineReducers({
+const mainReducer = combineReducers({
   tasks: taskReducer,
-  subtasks: subtaskReducer
+  subtasks: subtaskReducer,
+  auth: authReducer
 })
 
-const store = createStore(rootReducer, applyMiddleware(ReduxThunk))
+const store = createStore(mainReducer, applyMiddleware(ReduxThunk))
 
 export default function App() {
   return (
