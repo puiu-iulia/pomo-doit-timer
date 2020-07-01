@@ -1,18 +1,18 @@
-import React, { useState } from 'react';
-import { StyleSheet, View, KeyboardAvoidingView } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, View, KeyboardAvoidingView, Alert } from 'react-native';
 import { Text, Button, Input } from 'react-native-elements';
 import { AntDesign } from '@expo/vector-icons';
 import { Fontisto } from '@expo/vector-icons';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useDispatch } from 'react-redux';
 
-import * as authActions from '../../src/store/actions';
+import * as authActions from '../../src/store/actions/auth';
 
 const AuthScreen = (props) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [isSignin, setIsSignin] = useState(true);
-    const [isSignup, setIsSignup] = useState(false);
+    const [isSignin, setIsSignin] = useState(false);
+    const [isSignup, setIsSignup] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState();
 
@@ -41,7 +41,7 @@ const AuthScreen = (props) => {
         setIsLoading(true);
         try {
           await dispatch(action);
-          props.navigation.navigate('Shop');
+          props.navigation.navigate('Tasks');
         } catch (err) {
           setError(err.message);
           setIsLoading(false);
@@ -89,8 +89,8 @@ const AuthScreen = (props) => {
                 titleStyle={{color: 'white', marginRight: '30%'}}
                 buttonStyle={{backgroundColor: '#589690', width: '100%'}}
                 type="outline"
-                title={isSignup ? 'Login': 'SignUp'}
-                onPress={() => {props.navigation.navigate('Timer')}}
+                title={isSignup ? 'Sign Up': 'Login'}
+                onPress={authHandler}
             />
         </KeyboardAvoidingView>
     )

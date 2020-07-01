@@ -13,6 +13,7 @@ import * as taskActions from '../store/actions/task';
 
 const TasksScreen = ({navigation}) => {
     const tasks = useSelector(state => state.tasks.tasks);
+    console.log(tasks);
     const dispatch = useDispatch();
 
     const loadTasks = async () => {
@@ -24,21 +25,22 @@ const TasksScreen = ({navigation}) => {
     };
 
     useEffect(() => {
-      const willFocusSub = navigation.addListener(
-        'willFocus',
-        loadTasks
-      );
-  
-      return () => {
-        willFocusSub.remove();
-      };
-    }, [loadTasks]);
+      // const willFocusSub = navigation.addListener(
+      //   'willFocus',
+      //   loadTasks
+      // );
+      loadTasks();
+      // return () => {
+      //   willFocusSub.remove();
+      // };
+    }, [dispatch]);
 
-    const isModalVisible = navigation.getParam('isModalVisible');
+    
     // console.log(isModalVisible)
     useEffect(() => {
         navigation.setParams({isModalVisible: false});
       }, []);
+    const isModalVisible = navigation.getParam('isModalVisible');
 
     // if (tasks.length === 0) {
     //   return (

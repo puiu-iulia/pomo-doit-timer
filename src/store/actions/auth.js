@@ -1,10 +1,20 @@
+import { AsyncStorage } from 'react-native';
+
 export const SIGNUP = 'SIGNUP';
 export const LOGIN = 'LOGIN';
+export const AUTHENTICATE = 'AUTHENTICATE';
+
+export const authenticate = (userId, token ) => {
+  return dispatch => {
+    let isSignedIn = true;
+    dispatch({ type: AUTHENTICATE, userId: userId, token: token, isSignedIn: isSignedIn });
+  };
+};
 
 export const signup = (email, password) => {
   return async dispatch => {
     const response = await fetch(
-      'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyBY8UJq_xLD0nEe1HZHuvEOUfYIS9gg4pA',
+      'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDX3tTrFOsxk-RagxWLOXHgCMq-450lG9I',
       {
         method: 'POST',
         headers: {
@@ -28,16 +38,19 @@ export const signup = (email, password) => {
       throw new Error(message);
     }
 
+ 
     const resData = await response.json();
     console.log(resData);
-    dispatch({ type: SIGNUP, token: resData.idToken, userId: resData.localId });
+    saveUserCredentials(email, password);
+    saveDataToStorage(resData.idToken, resData.localId);
+    dispatch(authenticate(resData.localId, resData.idToken));
   };
 };
 
 export const login = (email, password) => {
   return async dispatch => {
     const response = await fetch(
-      'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyBY8UJq_xLD0nEe1HZHuvEOUfYIS9gg4pA',
+      'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDX3tTrFOsxk-RagxWLOXHgCMq-450lG9I',
       {
         method: 'POST',
         headers: {
@@ -65,6 +78,29 @@ export const login = (email, password) => {
 
     const resData = await response.json();
     console.log(resData);
-    dispatch({ type: LOGIN, token: resData.idToken, userId: resData.localId });
+    saveDataToStorage(resData.idToken, resData.localId);
+    dispatch(authenticate(resData.localId, resData.idToken));
   };
+};
+
+const saveUserCredentials = (username, password) => {
+  AsyncStorage.setItem(
+    'userCredentials',
+    JSON.stringify({
+      usernameData: username,
+      userPasswordData: password
+    })
+  );
+};
+
+
+const saveDataToStorage = (token, userId) => {
+  AsyncStorage.setItem(
+    'userData',
+    JSON.stringify({
+      token: token,
+      userId: userId
+    })
+  );
+  console.log('item set')
 };

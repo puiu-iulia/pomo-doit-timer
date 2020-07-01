@@ -100,12 +100,13 @@ const mainFlow = createDrawerNavigator({
 });
 
 const mainNav = createSwitchNavigator({
+    Startup: StartupScreen,
     Projects: mainFlow,
     Auth: AuthScreen,
     Startup: StartupScreen
 },
 {
-    initialRouteName: 'Auth'
+    initialRouteName: 'Startup'
 })
 
 
