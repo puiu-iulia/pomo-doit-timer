@@ -27,7 +27,7 @@ export const fetchTasks = () => {
                 )
             }
 
-            // console.log(loadedTasks);
+            console.log(loadedTasks, 'tasks');
     
             dispatch({ type: GET_TASKS, tasks: loadedTasks });
         } catch (err) {
