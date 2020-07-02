@@ -1,30 +1,25 @@
 import React, { useContext } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { NavigationEvents } from 'react-navigation';
+import { Button } from 'react-native-elements';
+import { useDispatch } from 'react-redux';
+
+import * as authActions from '../store/actions/auth';
 
 const ProfileScreen = ({navigation}) => {
 
+    const dispatch = useDispatch();
 
-
+    const handleLogout = () => {
+        dispatch(authActions.logout);
+    }
 
     return (
         <View style={styles.screen}>
-            {/* <NavigationEvents onWillFocus={fetchTasks} />
-            <FlatList
-                data={state}
-                keyExtractor={item => item._id}
-                renderItem={({ item }) => {
-                return (
-                    <TouchableOpacity
-                        onPress={() =>
-                            navigation.navigate('DetailsSubtasks', { id: item.id })
-                        }
-                    >
-                        <ListItem chevron title={item.name} />
-                    </TouchableOpacity>
-                    );
-                }}
-            /> */}
+            <Button
+                title={'Logout'}
+                onPress={handleLogout}
+            />
         </View>
     );
 };

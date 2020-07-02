@@ -3,11 +3,15 @@ import { AsyncStorage } from 'react-native';
 export const SIGNUP = 'SIGNUP';
 export const LOGIN = 'LOGIN';
 export const AUTHENTICATE = 'AUTHENTICATE';
+export const LOGOUT = 'LOGOUT';
 
-export const authenticate = (userId, token ) => {
+let timer;
+
+
+export const authenticate = (userId, token, expirationTime ) => {
   return dispatch => {
-    let isSignedIn = true;
-    dispatch({ type: AUTHENTICATE, userId: userId, token: token, isSignedIn: isSignedIn });
+    dispatch(setLogoutTimer(expirationTime));
+    dispatch({ type: AUTHENTICATE, userId: userId, token: token});
   };
 };
 
@@ -41,9 +45,12 @@ export const signup = (email, password) => {
  
     const resData = await response.json();
     console.log(resData);
+    dispatch(authenticate(resData.localId, resData.idToken, parseInt(resData.expiresIn) * 1000));
+    const expirationDate = new Date(
+      new Date().getTime() + parseInt(resData.expiresIn) * 1000
+    );
     saveUserCredentials(email, password);
-    saveDataToStorage(resData.idToken, resData.localId);
-    dispatch(authenticate(resData.localId, resData.idToken));
+    saveDataToStorage(resData.idToken, resData.localId, expirationDate);
   };
 };
 
@@ -78,8 +85,32 @@ export const login = (email, password) => {
 
     const resData = await response.json();
     console.log(resData);
-    saveDataToStorage(resData.idToken, resData.localId);
-    dispatch(authenticate(resData.localId, resData.idToken));
+    dispatch(authenticate(resData.localId, resData.idToken, parseInt(resData.expiresIn) * 1000));
+    const expirationDate = new Date(
+      new Date().getTime() + parseInt(resData.expiresIn) * 1000
+    );
+    saveDataToStorage(resData.idToken, resData.localId, expirationDate);
+    
+  };
+};
+
+export const logout = () => {
+  clearLogoutTimer();
+  AsyncStorage.removeItem('userData');
+  return { type: LOGOUT };
+};
+
+const clearLogoutTimer = () => {
+  if (timer) {
+    clearTimeout(timer);
+  }
+};
+
+const setLogoutTimer = expirationTime => {
+  return dispatch => {
+    timer = setTimeout(() => {
+      dispatch(logout());
+    }, expirationTime);
   };
 };
 

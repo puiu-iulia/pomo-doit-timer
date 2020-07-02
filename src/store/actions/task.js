@@ -6,9 +6,10 @@ export const UPDATE_TASK = 'UPDATE_TASK';
 export const DELETE_TASK = 'DELETE_TASK';
 
 export const fetchTasks = () => {
-    return async dispatch => {
+    return async (dispatch, getState) => {
+        const userId = getState().auth.userId;
         try {
-            const response = await fetch('https://tasks-timer.firebaseio.com/tasks.json');
+            const response = await fetch(`https://tasks-timer.firebaseio.com/tasks/${userId}.json`);
             if (!response.ok) {
                 throw new Error('Something went wrong!');
             }
@@ -37,8 +38,10 @@ export const fetchTasks = () => {
 }
 
 export const addTask = (title, priority, deadline) => {
-    return async dispatch => {
-        const response = await fetch('https://tasks-timer.firebaseio.com/tasks.json',
+    return async (dispatch, getState) => {
+        const token = getState().auth.token;
+        const userId = getState().auth.userId;
+        const response = await fetch(`https://tasks-timer.firebaseio.com/tasks/${userId}.json?auth=${token}`,
         {
             method: 'POST',
             headers: {
