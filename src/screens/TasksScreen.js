@@ -8,7 +8,7 @@ import { ListItem } from 'react-native-elements';
 
 import HeaderButton from '../components/HeaderButton';
 import TaskItem from '../components/TaskItem';
-import CustomModal from '../components/CustomModal';
+import TaskModal from '../components/TaskModal';
 import * as taskActions from '../store/actions/task';
 
 const TasksScreen = ({navigation}) => {
@@ -52,7 +52,7 @@ const TasksScreen = ({navigation}) => {
 
     return (
         <View style={styles.screen}>
-            <CustomModal
+            <TaskModal
               onClose={() => {
                 navigation.setParams({isModalVisible: false});
               }}
