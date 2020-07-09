@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, KeyboardAvoidingView, Alert } from 'react-native';
+import { StyleSheet, View, KeyboardAvoidingView, Alert, AsyncStorage } from 'react-native';
 import { Text, Button, Input } from 'react-native-elements';
 import { AntDesign } from '@expo/vector-icons';
 import { Fontisto } from '@expo/vector-icons';
@@ -11,12 +11,28 @@ import * as authActions from '../../src/store/actions/auth';
 const AuthScreen = (props) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [isSignin, setIsSignin] = useState(false);
-    const [isSignup, setIsSignup] = useState(true);
+    const [isSignin, setIsSignin] = useState(true);
+    const [isSignup, setIsSignup] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState();
 
     const dispatch = useDispatch();
+
+    const getUserCredentials = async () => {
+      const userCredentials = await AsyncStorage.getItem('userCredentials');
+      if (userCredentials) {
+        const transformedData = JSON.parse(userCredentials);
+        const { usernameData, userPasswordData } = transformedData;
+        if (usernameData != '' && userPasswordData != '') {
+          setEmail(usernameData);
+          setPassword(userPasswordData);
+        }            
+      }   
+    }
+
+    useEffect(() => {
+      getUserCredentials();
+    }, []);
 
     useEffect(() => {
         if (error) {
@@ -77,8 +93,8 @@ const AuthScreen = (props) => {
             </View>
             <TouchableOpacity
                 onPress={() => {
-                    setIsSignin(true);
-                    setIsSignup(false);
+                    setIsSignin(false);
+                    setIsSignup(true);
                 }}
             >
                 <Text style={styles.link}>{isSignup? 'Already have an account? Sign In' : 'Don\'t have an account? Sign Up'}</Text>

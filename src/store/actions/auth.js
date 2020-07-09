@@ -122,6 +122,7 @@ const saveUserCredentials = (username, password) => {
       userPasswordData: password
     })
   );
+  console.log('credentials set')
 };
 
 
@@ -133,5 +134,5 @@ const saveDataToStorage = (token, userId) => {
       userId: userId
     })
   );
-  console.log('item set')
+  
 };
