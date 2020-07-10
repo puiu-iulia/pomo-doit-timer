@@ -12,8 +12,8 @@ import TaskModal from '../components/TaskModal';
 import * as taskActions from '../store/actions/task';
 
 const TasksScreen = ({navigation}) => {
-    const tasks = useSelector(state => state.tasks.tasks);
-    console.log(tasks);
+    const userTasks = useSelector(state => state.tasks.tasks);
+    const tasks = userTasks.filter(task => task.completed === false);
     const dispatch = useDispatch();
 
     const loadTasks = async () => {
@@ -58,7 +58,7 @@ const TasksScreen = ({navigation}) => {
               }}
               modalVisible={isModalVisible} 
             />
-            {/* <NavigationEvents onWillFocus={fetchTasks} /> */}
+            <NavigationEvents onWillFocus={loadTasks} />
             <FlatList
                 data={tasks}
                 keyExtractor={item => item.id}

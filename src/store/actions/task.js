@@ -9,7 +9,7 @@ export const fetchTasks = () => {
     return async (dispatch, getState) => {
         const userId = getState().auth.userId;
         try {
-            const response = await fetch(`https://tasks-timer.firebaseio.com/tasks/${userId}.json`);
+            const response = await fetch(`https://tasks-timer.firebaseio.com/tasks.json`);
             if (!response.ok) {
                 throw new Error('Something went wrong!');
             }
@@ -21,6 +21,7 @@ export const fetchTasks = () => {
                 loadedTasks.push(
                     new Task(
                        key,
+                       resData[key].userId,
                        resData[key].title,
                        resData[key].priority,
                        resData[key].deadline,
@@ -30,9 +31,11 @@ export const fetchTasks = () => {
                 )
             }
 
-            console.log(loadedTasks, 'tasks');
+            userTasks = loadedTasks.filter(task => task.userId === userId);
+
+            // console.log(tasks, userTasks, loadedTasks, 'tasks');
     
-            dispatch({ type: GET_TASKS, tasks: loadedTasks });
+            dispatch({ type: GET_TASKS, tasks: userTasks });
         } catch (err) {
             this(err);
         }
@@ -43,13 +46,14 @@ export const addTask = (title, priority, deadline, completed, subtasks) => {
     return async (dispatch, getState) => {
         const token = getState().auth.token;
         const userId = getState().auth.userId;
-        const response = await fetch(`https://tasks-timer.firebaseio.com/tasks/${userId}.json?auth=${token}`,
+        const response = await fetch(`https://tasks-timer.firebaseio.com/tasks.json`,
         {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
             },
             body: JSON.stringify({
+                userId,
                 title,
                 priority,
                 deadline,
@@ -60,7 +64,7 @@ export const addTask = (title, priority, deadline, completed, subtasks) => {
         const resData = await response.json();
         console.log(resData);
 
-        dispatch({type: CREATE_TASK, taskData: {id: resData.name, title, priority, deadline}})
+        dispatch({type: CREATE_TASK, taskData: {id: resData.name, userId, title, priority, deadline, completed, subtasks}})
     }
 }
 
@@ -68,7 +72,7 @@ export const updateTask = (id, title, priority, deadline, completed, subtasks) =
     return async (dispatch, getState) => {
         const token = getState().auth.token;
         const userId = getState().auth.userId;
-        const response = await fetch(`https://tasks-timer.firebaseio.com/tasks/${userId}.json?auth=${token}/${id}`,
+        const response = await fetch(`https://tasks-timer.firebaseio.com/tasks/${id}.json`,
         {
             method: 'PATCH',
             headers: {
@@ -83,9 +87,9 @@ export const updateTask = (id, title, priority, deadline, completed, subtasks) =
             })
         });
         const resData = await response.json();
-        console.log(resData);
+        // console.log(resData);
 
-        dispatch({type: UPDATE_TASK, pid: id, taskData: {title, priority, deadline, completed, subtasks}})
+        dispatch({type: UPDATE_TASK, pid: id, taskData: {userId, title, priority, deadline, completed, subtasks}})
     }
 }
 
@@ -95,7 +99,7 @@ export const deleteTask = id => {
         const userId = getState().auth.userId;
 
         const response = await fetch(
-            `https://tasks-timer.firebaseio.com/tasks/${userId}.json?auth=${token}/${id}`,
+            `https://tasks-timer.firebaseio.com/tasks/${id}.json?auth=${token}`,
             {
               method: 'DELETE'
             }

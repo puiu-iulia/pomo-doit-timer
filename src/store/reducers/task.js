@@ -13,6 +13,7 @@ export default (state = initialState, action) => {
         case CREATE_TASK: {
             const newTask = new Task(
                 action.taskData.id,
+                action.taskData.userId,
                 action.taskData.title,
                 action.taskData.priority,
                 action.taskData.deadline,
@@ -30,6 +31,7 @@ export default (state = initialState, action) => {
             );
             const updatedTask = new Task(
                 action.pid,
+                action.taskData.userId,
                 action.taskData.title,
                 action.taskData.priority,
                 action.taskData.deadline,
