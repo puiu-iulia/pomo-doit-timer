@@ -7,9 +7,8 @@ import { TextInput } from 'react-native-gesture-handler';
 import { useDispatch } from 'react-redux';
 
 import * as taskActions from '../store/actions/task';
-import { backgroundColor } from 'react-native-calendars/src/style';
  
-const TaskModal = ({modalVisible, onClose, addItemHandler}) => {
+const TaskModal = ({modalVisible, onClose}) => {
 
     const [title, setTitle] = useState();
     const [priority, setPriority] = useState(1);
@@ -17,12 +16,14 @@ const TaskModal = ({modalVisible, onClose, addItemHandler}) => {
     const [mediumChecked, setMediumChecked] = useState(false);
     const [lowChecked, setLowChecked] = useState(false);
     const [selected, setSelected] = useState();
+    const completed = false;
+    const subtasks = [];
 
     const dispatch = useDispatch()
 
     const createTask = useCallback(async () => {
         try {
-          await dispatch(taskActions.addTask(title, priority, selected), [dispatch, title, priority, selected]);
+          await dispatch(taskActions.addTask(title, priority, selected, completed, subtasks), [dispatch, title, priority, selected]);
         } catch (err) {
             console.log(err);
         }

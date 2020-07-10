@@ -15,13 +15,41 @@ export default (state = initialState, action) => {
                 action.taskData.id,
                 action.taskData.title,
                 action.taskData.priority,
-                action.taskData.deadline 
+                action.taskData.deadline,
+                action.taskData.completed,
+                action.taskData.subtasks
             );
             return {
                 ...state,
                 tasks: state.tasks.concat(newTask)
             }
         }
+        case UPDATE_TASK: {
+            const taskIndex = state.tasks.findIndex(
+                task => task.id === action.pid
+            );
+            const updatedTask = new Task(
+                action.pid,
+                action.taskData.title,
+                action.taskData.priority,
+                action.taskData.deadline,
+                action.taskData.completed,
+                action.taskData.subtasks
+            );
+            const updatedTasks = [...state.tasks];
+            updatedTasks[taskIndex] = updatedTask;
+            return {
+                ...state,
+                tasks: updatedTasks
+            };
+        }
+        case DELETE_TASK: 
+            return {
+                ...state,
+                tasks: state.tasks.filter(
+                    task => task.id !== action.pid
+                )
+            };
     }
     return state;
 }

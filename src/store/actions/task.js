@@ -23,7 +23,9 @@ export const fetchTasks = () => {
                        key,
                        resData[key].title,
                        resData[key].priority,
-                       resData[key].deadline
+                       resData[key].deadline,
+                       resData[key].completed,
+                       resData[key].subtasks
                     )
                 )
             }
@@ -37,7 +39,7 @@ export const fetchTasks = () => {
     }
 }
 
-export const addTask = (title, priority, deadline) => {
+export const addTask = (title, priority, deadline, completed, subtasks) => {
     return async (dispatch, getState) => {
         const token = getState().auth.token;
         const userId = getState().auth.userId;
@@ -50,12 +52,58 @@ export const addTask = (title, priority, deadline) => {
             body: JSON.stringify({
                 title,
                 priority,
-                deadline
+                deadline,
+                completed,
+                subtasks
             })
         });
         const resData = await response.json();
         console.log(resData);
 
         dispatch({type: CREATE_TASK, taskData: {id: resData.name, title, priority, deadline}})
+    }
+}
+
+export const updateTask = (id, title, priority, deadline, completed, subtasks) => {
+    return async (dispatch, getState) => {
+        const token = getState().auth.token;
+        const userId = getState().auth.userId;
+        const response = await fetch(`https://tasks-timer.firebaseio.com/tasks/${userId}.json?auth=${token}/${id}`,
+        {
+            method: 'PATCH',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                title,
+                priority,
+                deadline,
+                completed,
+                subtasks
+            })
+        });
+        const resData = await response.json();
+        console.log(resData);
+
+        dispatch({type: UPDATE_TASK, pid: id, taskData: {title, priority, deadline, completed, subtasks}})
+    }
+}
+
+export const deleteTask = id => {
+    return async (dispatch, getState) => {
+        const token = getState().auth.token;
+        const userId = getState().auth.userId;
+
+        const response = await fetch(
+            `https://tasks-timer.firebaseio.com/tasks/${userId}.json?auth=${token}/${id}`,
+            {
+              method: 'DELETE'
+            }
+        );
+    
+        if (!response.ok) {
+        throw new Error('Something went wrong!');
+        }
+        dispatch({ type: DELETE_PRODUCT, pid: id });
     }
 }
