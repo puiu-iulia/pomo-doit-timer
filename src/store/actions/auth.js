@@ -90,7 +90,7 @@ export const login = (email, password) => {
       new Date().getTime() + parseInt(resData.expiresIn) * 1000
     );
     saveDataToStorage(resData.idToken, resData.localId, expirationDate);
-    
+    saveUserCredentials(email, password);
   };
 };
 
