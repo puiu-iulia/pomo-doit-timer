@@ -8,6 +8,7 @@ import { Ionicons, MaterialIcons, MaterialCommunityIcons, FontAwesome } from '@e
 import SubtaskModal from '../components/SubtaskModal';
 import ReminderModal from '../components/ReminderModal';
 import * as subtaskActions from '../store/actions/subtask';
+import * as taskActions from '../store/actions/task';
 
 
 const DetailsSubtasksScreen = ({navigation}) => {
@@ -25,6 +26,15 @@ const DetailsSubtasksScreen = ({navigation}) => {
            console.log(err);
         }
     }; 
+
+    const handleCheckTask = async () => {
+        try {
+            await dispatch(taskActions.updateTask(taskId, selectedTask.title, selectedTask.priority, selectedTask.deadline, true, selectedTask.subtasks));
+        } catch (err) {
+            console.log(err);
+        }
+        navigation.navigate('Tasks');
+    };
   
     useEffect(() => {
         loadSubtasks();
@@ -57,7 +67,7 @@ const DetailsSubtasksScreen = ({navigation}) => {
             <View style={styles.titleContainer}>
                 <View style={styles.titleContainer}>
                     <TouchableOpacity
-                        // onPress={handleCheckTask}
+                        onPress={handleCheckTask}
                     >
                         <MaterialCommunityIcons name="checkbox-blank-outline" size={24} color="#589690"/>
                     </TouchableOpacity>
