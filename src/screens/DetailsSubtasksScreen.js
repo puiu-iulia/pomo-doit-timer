@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
 import { NavigationEvents } from 'react-navigation';
 import { Text, Button, Input, ListItem } from 'react-native-elements';
 import { useSelector, useDispatch } from 'react-redux';
-import { Ionicons, MaterialIcons, MaterialCommunityIcons, FontAwesome } from '@expo/vector-icons';
+import { Ionicons, MaterialIcons, MaterialCommunityIcons, Feather } from '@expo/vector-icons';
 
 import SubtaskModal from '../components/SubtaskModal';
 import ReminderModal from '../components/ReminderModal';
@@ -13,10 +13,14 @@ import * as taskActions from '../store/actions/task';
 
 const DetailsSubtasksScreen = ({navigation}) => {
 
+    const [title, setTitle] = useState();
+    const [isEditingTitle, setIsEditingTitle] = useState(false);
+
     const taskId = navigation.getParam('id');
     const selectedTask = useSelector(state => state.tasks.tasks.find(task => task.id === taskId));
 
-    const subtasks = useSelector(state => state.subtasks.allSubtasks);
+    const loadedSubtasks = useSelector(state => state.subtasks.allSubtasks);
+    const subtasks = loadedSubtasks.filter(subtask => subtask.projectId === taskId);
     const dispatch = useDispatch();
     
     const loadSubtasks = async () => {
@@ -35,10 +39,19 @@ const DetailsSubtasksScreen = ({navigation}) => {
         }
         navigation.navigate('Tasks');
     };
+
+    const handleEditTask = async () => {
+        try {
+            await dispatch(taskActions.updateTask(taskId, title, selectedTask.priority, selectedTask.deadline, selectedTask.completed, selectedTask.subtasks));
+        } catch (err) {
+            console.log(err);
+        }
+        setIsEditingTitle(false);
+    }
   
     useEffect(() => {
         loadSubtasks();
-    }, [dispatch]);
+    }, [loadSubtasks]);
 
 
     useEffect(() => {
@@ -64,29 +77,44 @@ const DetailsSubtasksScreen = ({navigation}) => {
                 }
                 subtaskModalVisible={isSubtaskModalVisible} 
             />
+            
+            {/* <View style={styles.titleContainer}> */}
+                {
+                    !isEditingTitle ? (
+                        <View style={styles.titleContainer}>
+                            <View style={styles.titleContainer}>
+                                <TouchableOpacity
+                                    onPress={handleCheckTask}
+                                >
+                                    <MaterialCommunityIcons name="checkbox-blank-outline" size={24} color="#589690"/>
+                                </TouchableOpacity>
+                                <Text style={styles.titleTaskText}>{selectedTask.title ? selectedTask.title : ''}</Text>
+                            </View>
+                            <TouchableOpacity
+                                
+                                onPress={() => setIsEditingTitle(true)}
+                            >
+                                <MaterialIcons name="edit" size={24} color="#6e7c7d" />
+                            </TouchableOpacity>
+                        </View>
+                        
+                    ) : (
+                        <View style={styles.container}>
+                            <Input
+                                inputContainerStyle={{margin: 0}}
+                                value={title}
+                                placeholder={selectedTask.title}
+                                onChangeText={setTitle}
+                                onEndEditing={handleEditTask}
+                                rightIcon={{type: 'feather', name: 'save', onPress: handleEditTask, color: "#6e7c7d"}}
+                            />
+                        </View>
+                    )
+                }
+                      
+            {/* </View> */}
             <View style={styles.titleContainer}>
-                <View style={styles.titleContainer}>
-                    <TouchableOpacity
-                        onPress={handleCheckTask}
-                    >
-                        <MaterialCommunityIcons name="checkbox-blank-outline" size={24} color="#589690"/>
-                    </TouchableOpacity>
-                    <Text style={styles.titleTaskText}>{selectedTask.title}</Text>
-                </View>
-                <TouchableOpacity
-                    // onPress={handleDeleteTask}
-                >
-                    <MaterialIcons name="edit" size={24} color="#6e7c7d" />
-                </TouchableOpacity>
-            </View>
-            <View style={styles.titleContainer}>
-                <Input
-                    containerStyle={{ height: 48}}
-                    placeholder={'Enter description...'}
-                />
-            </View>
-            <View style={styles.titleContainer}>
-                <Text style={styles.subtasksText}>Time Spent on Project:</Text>
+                <Text style={styles.subtasksText}>Tracked Time:</Text>
                 <TouchableOpacity     
                     style={styles.buttonContainer}>
                     <Button
@@ -161,22 +189,7 @@ const DetailsSubtasksScreen = ({navigation}) => {
 
 DetailsSubtasksScreen.navigationOptions = (navigationData) => {
     return {
-        headerTitle: 'To Do:',
-        // headerRight: () => (
-        //     <HeaderButtons  
-        //       HeaderButtonComponent={HeaderButton}
-        //     >
-        //        <Item
-        //             color='#966658' 
-        //             size={32} 
-        //             title="Add Task"
-        //             iconName={'md-add-circle-outline'}
-        //             onPress={() => {
-        //                 navData.navigation.setParams({isModalVisible: true})
-        //             }}
-        //        />
-        //     </HeaderButtons>
-        // ),
+        headerTitle: 'To Do:'
     };
 };
 
@@ -192,6 +205,10 @@ const styles = StyleSheet.create({
         padding: 8,
         marginTop: 8
     },
+    container: {
+        backgroundColor: '#fff',
+        marginTop: 8
+    },
     titleTaskText: {
         fontSize: 18,
         color: '#6e7c7d',
@@ -205,6 +222,10 @@ const styles = StyleSheet.create({
         color: '#6e7c7d',
         paddingLeft: 4,
         alignSelf: 'center'
+    },
+    editButton: {
+        flexDirection: 'row',
+        justifyContent: 'flex-end'
     }
 });
 
