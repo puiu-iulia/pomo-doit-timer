@@ -36,18 +36,10 @@ const CustomModal = ({modalVisible, onClose, addItemHandler}) => {
  
     return (
         <View>
-            {/* <View>
-                <Button onPress={showDatepicker} title="Show date picker!" />
-            </View>
-            <View>
-                <Button onPress={showTimepicker} title="Show time picker!" />
-            </View> */}
-            {/* {modalVisible && ( */}
                 <DateTimePickerModal
                     isVisible={modalVisible}
                     value={date}
                     mode='datetime'
-                    // display="default"
                     onConfirm={onClose}
                     onCancel={onClose}
                 />

@@ -17,10 +17,10 @@ const DetailsSubtasksScreen = ({navigation}) => {
     const [isEditingTitle, setIsEditingTitle] = useState(false);
 
     const taskId = navigation.getParam('id');
-    const selectedTask = useSelector(state => state.tasks.tasks.find(task => task.id === taskId));
+    // const selectedTask = useSelector(state => state.tasks.tasks.find(task => task.id === taskId));
 
-    const loadedSubtasks = useSelector(state => state.subtasks.allSubtasks);
-    const subtasks = loadedSubtasks.filter(subtask => subtask.projectId === taskId);
+    // const loadedSubtasks = useSelector(state => state.subtasks.allSubtasks);
+    // const subtasks = loadedSubtasks.filter(subtask => subtask.projectId === taskId);
     const dispatch = useDispatch();
     
     const loadSubtasks = async () => {
@@ -49,9 +49,9 @@ const DetailsSubtasksScreen = ({navigation}) => {
         setIsEditingTitle(false);
     }
   
-    useEffect(() => {
-        loadSubtasks();
-    }, [loadSubtasks]);
+    // useEffect(() => {
+    //     loadSubtasks();
+    // }, [loadSubtasks]);
 
 
     useEffect(() => {
@@ -63,7 +63,7 @@ const DetailsSubtasksScreen = ({navigation}) => {
     
     return (
         <View style={styles.screen}>
-            <NavigationEvents onWillFocus={loadSubtasks} />
+            {/* <NavigationEvents onWillFocus={loadSubtasks} /> */}
             <ReminderModal
                 modalVisible={isReminderModalVisible}
                 onClose={() => {
@@ -88,7 +88,7 @@ const DetailsSubtasksScreen = ({navigation}) => {
                                 >
                                     <MaterialCommunityIcons name="checkbox-blank-outline" size={24} color="#589690"/>
                                 </TouchableOpacity>
-                                <Text style={styles.titleTaskText}>{selectedTask.title ? selectedTask.title : ''}</Text>
+                                <Text style={styles.titleTaskText}>Project Title</Text>
                             </View>
                             <TouchableOpacity
                                 
@@ -103,7 +103,7 @@ const DetailsSubtasksScreen = ({navigation}) => {
                             <Input
                                 inputContainerStyle={{margin: 0}}
                                 value={title}
-                                placeholder={selectedTask.title}
+                                //placeholder={selectedTask.title}
                                 onChangeText={setTitle}
                                 onEndEditing={handleEditTask}
                                 rightIcon={{type: 'feather', name: 'save', onPress: handleEditTask, color: "#6e7c7d"}}
@@ -130,7 +130,7 @@ const DetailsSubtasksScreen = ({navigation}) => {
                 </TouchableOpacity>
             </View>
             <View style={styles.titleContainer}>
-                <Text style={styles.subtasksText}>Due Date: {selectedTask.deadline}</Text>
+                <Text style={styles.subtasksText}>Due Date: 11th Novermber 2020</Text>
                 <TouchableOpacity
                     style={styles.buttonContainer}>
                     <Button
@@ -145,7 +145,7 @@ const DetailsSubtasksScreen = ({navigation}) => {
                     />
                 </TouchableOpacity>
             </View>
-            <View style={styles.titleContainer}>
+            {/* <View style={styles.titleContainer}>
                 <Text style={styles.subtasksText}>Subtasks:</Text>
                 <TouchableOpacity 
                     style={styles.buttonContainer}
@@ -182,7 +182,7 @@ const DetailsSubtasksScreen = ({navigation}) => {
                     </TouchableOpacity>
                     );
                 }}
-            />
+            /> */}
         </View>
     );
 };

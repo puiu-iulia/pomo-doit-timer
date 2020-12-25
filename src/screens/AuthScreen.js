@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, KeyboardAvoidingView, Alert, AsyncStorage } from 'react-native';
+import { StyleSheet, View, KeyboardAvoidingView, Alert} from 'react-native';
+import { AsyncStorage } from '@react-native-async-storage/async-storage';
 import { Text, Button, Input } from 'react-native-elements';
 import { AntDesign } from '@expo/vector-icons';
 import { Fontisto } from '@expo/vector-icons';
@@ -41,34 +42,34 @@ const AuthScreen = (props) => {
       }, [error]);
 
     const authHandler = async () => {
-        let action;
-        if (isSignup) {
-          action = authActions.signup(
-            email,
-            password
-          );
-        } else {
-          action = authActions.login(
-            email,
-            password
-          );
-        }
-        setError(null);
-        setIsLoading(true);
-        try {
-          await dispatch(action);
-          props.navigation.navigate('Tasks');
-        } catch (err) {
-          setError(err.message);
-          setIsLoading(false);
-        }
+        // let action;
+        // if (isSignup) {
+        //   action = authActions.signup(
+        //     email,
+        //     password
+        //   );
+        // } else {
+        //   action = authActions.login(
+        //     email,
+        //     password
+        //   );
+        // }
+        // setError(null);
+        // setIsLoading(true);
+        // try {
+        //   await dispatch(action);
+          props.navigation.navigate('Home');
+        // } catch (err) {
+        //   setError(err.message);
+        //   setIsLoading(false);
+        // }
       };
 
     return (
         <KeyboardAvoidingView style={styles.screen}>
             <View style={styles.input}>
                 <Input
-                    label="Email"
+                    placeholder="Email"
                     value={email}
                     onChangeText={setEmail}
                     autoCapitalize="none"
@@ -81,7 +82,7 @@ const AuthScreen = (props) => {
             <View style={styles.input}>
                 <Input
                     secureTextEntry
-                    label="Password"
+                    placeholder="Password"
                     value={password}
                     onChangeText={setPassword}
                     autoCapitalize="none"
@@ -91,19 +92,24 @@ const AuthScreen = (props) => {
                     }
                 />
             </View>
-            <TouchableOpacity
-                onPress={() => {
-                    setIsSignin(false);
-                    setIsSignup(true);
-                }}
-            >
-                <Text style={styles.link}>{isSignup? 'Already have an account? Sign In' : 'Don\'t have an account? Sign Up'}</Text>
-            </TouchableOpacity>
+            <View style={styles.linksContainer}>
+              <TouchableOpacity
+                  onPress={() => {
+                      setIsSignin(false);
+                      setIsSignup(true);
+                  }}
+              >
+                  <Text style={styles.link}>{isSignup? 'Sign In' : 'Sign Up'}</Text>
+                  <Text style={styles.link}>Forgot Password?</Text>
+              </TouchableOpacity>
+            </View>
+           
             <Button
                 disabled={(!password || !email)}
                 disabledStyle={{backgroundColor: '#6e7c7d', }}
-                titleStyle={{color: 'white', marginRight: '30%'}}
-                buttonStyle={{backgroundColor: '#589690', width: '100%'}}
+                titleStyle={{color: 'white'}}
+                buttonStyle={{backgroundColor: '#589690'}}
+                containerStyle={{width: '80%'}}
                 type="outline"
                 title={isSignup ? 'Sign Up': 'Login'}
                 onPress={authHandler}
@@ -117,7 +123,7 @@ const styles = StyleSheet.create({
     screen: {
         flex: 1,
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
     },
     input: {
       width: '80%',
@@ -125,7 +131,13 @@ const styles = StyleSheet.create({
     },
     link: {
         color: '#6e7c7d',
-        marginBottom: 24
+        marginBottom: 24,
+        textDecorationLine: 'underline',
+        alignSelf: 'flex-end'
+    },
+    linksContainer: {
+      width: '80%',
+      marginRight: 16
     }
   });
 
