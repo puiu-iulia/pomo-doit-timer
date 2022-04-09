@@ -16,7 +16,7 @@
     "@react-native-firebase/auth": "^8.1.1",
     "expo": "~37.0.3",
     "firebase": "^7.15.1",
-    "moment": "^2.26.0",
+    "moment": "^2.29.2",
     "react": "~16.9.0",
     "react-countdown-circle-timer": "^2.3.7",
     "react-dom": "~16.9.0",
